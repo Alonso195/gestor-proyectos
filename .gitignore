@@ -1,0 +1,23 @@
+# .NET
+**/bin/
+**/obj/
+**/*.user
+**/*.suo
+*.sln.docstates
+**/appsettings.Development.json
+
+# Angular
+**/node_modules/
+**/dist/
+**/.angular/
+**/*.js.map
+
+# IDE
+.vscode/
+.idea/
+*.DS_Store
+
+# Secrets — never commit credentials
+**/appsettings.Development.json
+**/*.pfx
+**/*.key
