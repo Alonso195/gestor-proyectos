@@ -21,10 +21,9 @@ public class ErrorHandlingMiddleware
 
     public async Task InvokeAsync(HttpContext context)
     {
-        await _next(context);
-
         try
         {
+            await _next(context);
         }
         catch (BusinessException ex)
         {
@@ -36,7 +35,7 @@ public class ErrorHandlingMiddleware
         }
         catch (UnauthorizedAccessException ex)
         {
-            await WriteResponseAsync(context, HttpStatusCode.Forbidden, ex.Message);
+            await WriteResponseAsync(context, HttpStatusCode.Unauthorized, ex.Message);
         }
         catch (Exception ex)
         {
@@ -50,6 +49,10 @@ public class ErrorHandlingMiddleware
         context.Response.StatusCode = (int)statusCode;
         context.Response.ContentType = "application/json";
         var response = ApiResponse<object>.Fail(message);
-        await context.Response.WriteAsync(JsonSerializer.Serialize(response));
+        var json = JsonSerializer.Serialize(response, new JsonSerializerOptions
+        {
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+        });
+        await context.Response.WriteAsync(json);
     }
 }

@@ -11,11 +11,8 @@ public static class DependencyInjection
         // Auth — provided
         services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 
-        // TODO: Register your repository implementations here.
-        // Example:
-        // services.AddScoped<IProyectoRepository, ProyectoRepository>();
-        // services.AddScoped<ITareaRepository, TareaRepository>();
-        // services.AddScoped<IResumenRepository, ResumenRepository>();
+        services.AddScoped<IProyectoRepository, ProyectoRepository>();
+        services.AddScoped<IResumenRepository, ResumenRepository>();
 
         return services;
     }

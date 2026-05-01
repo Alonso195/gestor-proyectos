@@ -10,30 +10,33 @@ export const routes: Routes = [
       import('./features/auth/login/login.component').then(m => m.LoginComponent)
   },
   {
-    path: 'home',
+    path: '',
     canActivate: [authGuard],
     loadComponent: () =>
-      import('./features/home/home.component').then(m => m.HomeComponent)
-  },
-  {
-    path: 'proyectos',
-    canActivate: [authGuard],
-    loadComponent: () =>
-      import('./features/projects/proyectos.component').then(m => m.ProyectosComponent)
-  },
-  {
-    path: 'proyectos/:proyectoId/tareas',
-    canActivate: [authGuard],
-    // TODO: Add roleGuard here to restrict access based on role if needed
-    loadComponent: () =>
-      import('./features/tasks/tareas.component').then(m => m.TareasComponent)
+      import('./layout/main-layout.component').then(m => m.MainLayoutComponent),
+    children: [
+      { path: '', pathMatch: 'full', redirectTo: 'home' },
+      {
+        path: 'home',
+        loadComponent: () =>
+          import('./features/home/home.component').then(m => m.HomeComponent)
+      },
+      {
+        path: 'proyectos',
+        loadComponent: () =>
+          import('./features/projects/proyectos.component').then(m => m.ProyectosComponent)
+      },
+      {
+        path: 'proyectos/:proyectoId/tareas',
+        loadComponent: () =>
+          import('./features/tasks/tareas.component').then(m => m.TareasComponent)
+      }
+    ]
   },
   {
     path: 'forbidden',
     loadComponent: () =>
       import('./features/auth/login/login.component').then(m => m.LoginComponent)
-    // TODO: Create a proper ForbiddenComponent
   },
-  { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: '**', redirectTo: 'home' }
 ];

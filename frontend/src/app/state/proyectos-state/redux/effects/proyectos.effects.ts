@@ -1,24 +1,87 @@
 import { inject, Injectable } from '@angular/core';
-import { Actions } from '@ngrx/effects';
-import { HttpClient } from '@angular/common/http';
-import { environment } from '../../../../environments/environment';
-import * as ProyectosActions from '../redux/actions/proyectos.actions';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { catchError, EMPTY, map, of, switchMap } from 'rxjs';
+import { environment } from '../../../../../environments/environment';
+import { formatHttpApiError } from '../../../../core/utils/api-error.util';
+import type { ApiResponse, PagedResultDto, ProyectoDto } from '../../../../features/projects/models/proyecto.models';
+import * as ProyectosActions from '../actions/proyectos.actions';
 
 @Injectable()
 export class ProyectosEffects {
   private actions$ = inject(Actions);
   private http = inject(HttpClient);
 
-  // TODO: Implement NgRx effects for Proyectos.
-  //
-  // Required effects:
-  //   loadProyectos$   — listens for loadProyectos, calls GET /api/proyectos?pagina=&tamanoPagina=
-  //                      dispatches loadProyectosSuccess or loadProyectosFailure
-  //   createProyecto$  — listens for createProyecto, calls POST /api/proyectos
-  //   updateProyecto$  — listens for updateProyecto, calls PUT /api/proyectos/:id
-  //   deleteProyecto$  — listens for deleteProyecto, calls DELETE /api/proyectos/:id
-  //
-  // Use the same pattern as SessionEffects (see session-state/redux/effects/session.effects.ts).
-  // All HTTP calls should go through the injected HttpClient.
-  // Use environment.apiUrl as the base URL.
+  loadProyectos$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(ProyectosActions.loadProyectos),
+      switchMap(({ pagina, tamanoPagina }) =>
+        this.http
+          .get<ApiResponse<PagedResultDto<ProyectoDto>>>(`${environment.apiUrl}/proyectos`, {
+            params: { pagina: String(pagina), tamanoPagina: String(tamanoPagina) }
+          })
+          .pipe(
+            map(res => {
+              const data = res.data;
+              if (!data) {
+                return ProyectosActions.loadProyectosFailure({ error: 'Respuesta inválida del servidor.' });
+              }
+              return ProyectosActions.loadProyectosSuccess({
+                items: data.items,
+                total: data.total
+              });
+            }),
+            catchError((err: HttpErrorResponse) =>
+              of(
+                ProyectosActions.loadProyectosFailure({
+                  error: formatHttpApiError(err)
+                })
+              )
+            )
+          )
+      )
+    )
+  );
+
+  createProyecto$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(ProyectosActions.createProyecto),
+      switchMap(({ payload, pagina, tamanoPagina }) =>
+        this.http.post<ApiResponse<ProyectoDto>>(`${environment.apiUrl}/proyectos`, payload).pipe(
+          map(() => ProyectosActions.loadProyectos({ pagina, tamanoPagina })),
+          catchError((err: HttpErrorResponse) =>
+            of(ProyectosActions.proyectosMutationFailure({ error: formatHttpApiError(err) }))
+          )
+        )
+      )
+    )
+  );
+
+  updateProyecto$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(ProyectosActions.updateProyecto),
+      switchMap(({ id, payload, pagina, tamanoPagina }) =>
+        this.http.put<ApiResponse<ProyectoDto>>(`${environment.apiUrl}/proyectos/${id}`, payload).pipe(
+          map(() => ProyectosActions.loadProyectos({ pagina, tamanoPagina })),
+          catchError((err: HttpErrorResponse) =>
+            of(ProyectosActions.proyectosMutationFailure({ error: formatHttpApiError(err) }))
+          )
+        )
+      )
+    )
+  );
+
+  deleteProyecto$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(ProyectosActions.deleteProyecto),
+      switchMap(({ id, pagina, tamanoPagina }) =>
+        this.http.delete<ApiResponse<unknown>>(`${environment.apiUrl}/proyectos/${id}`).pipe(
+          map(() => ProyectosActions.loadProyectos({ pagina, tamanoPagina })),
+          catchError((err: HttpErrorResponse) =>
+            of(ProyectosActions.proyectosMutationFailure({ error: formatHttpApiError(err) }))
+          )
+        )
+      )
+    )
+  );
 }
