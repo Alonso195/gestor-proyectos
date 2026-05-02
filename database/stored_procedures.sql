@@ -174,3 +174,130 @@ BEGIN
         ) AS TareasPendientes;
 END
 GO
+
+-- ------------------------------------------------------------
+-- Tareas — CRUD, listado por proyecto, cambio de estado
+-- ------------------------------------------------------------
+
+CREATE OR ALTER PROCEDURE sp_ListarTareasPorProyectoPaginado
+    @ProyectoId INT,
+    @Pagina INT,
+    @TamanoPagina INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    IF @Pagina < 1 SET @Pagina = 1;
+    IF @TamanoPagina < 1 SET @TamanoPagina = 10;
+
+    DECLARE @Offset INT = (@Pagina - 1) * @TamanoPagina;
+
+    SELECT
+        t.Id,
+        t.ProyectoId,
+        p.Nombre AS ProyectoNombre,
+        t.Titulo,
+        t.Descripcion,
+        t.PrioridadId,
+        pr.Nombre AS PrioridadNombre,
+        t.EstadoId,
+        e.Nombre AS EstadoNombre,
+        t.UsuarioAsignadoId,
+        u.Nombre AS UsuarioAsignadoNombre,
+        t.FechaLimite,
+        t.FechaCreacion
+    FROM Tareas t
+    INNER JOIN Proyectos p ON p.Id = t.ProyectoId
+    INNER JOIN Prioridades pr ON pr.Id = t.PrioridadId
+    INNER JOIN Estados e ON e.Id = t.EstadoId
+    LEFT JOIN Usuarios u ON u.Id = t.UsuarioAsignadoId
+    WHERE t.ProyectoId = @ProyectoId
+    ORDER BY t.Id
+    OFFSET @Offset ROWS FETCH NEXT @TamanoPagina ROWS ONLY;
+
+    SELECT COUNT(1) AS Total FROM Tareas WHERE ProyectoId = @ProyectoId;
+END
+GO
+
+CREATE OR ALTER PROCEDURE sp_ObtenerTareaPorId
+    @Id INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    SELECT
+        t.Id,
+        t.ProyectoId,
+        p.Nombre AS ProyectoNombre,
+        t.Titulo,
+        t.Descripcion,
+        t.PrioridadId,
+        pr.Nombre AS PrioridadNombre,
+        t.EstadoId,
+        e.Nombre AS EstadoNombre,
+        t.UsuarioAsignadoId,
+        u.Nombre AS UsuarioAsignadoNombre,
+        t.FechaLimite,
+        t.FechaCreacion
+    FROM Tareas t
+    INNER JOIN Proyectos p ON p.Id = t.ProyectoId
+    INNER JOIN Prioridades pr ON pr.Id = t.PrioridadId
+    INNER JOIN Estados e ON e.Id = t.EstadoId
+    LEFT JOIN Usuarios u ON u.Id = t.UsuarioAsignadoId
+    WHERE t.Id = @Id;
+END
+GO
+
+CREATE OR ALTER PROCEDURE sp_InsertarTarea
+    @ProyectoId INT,
+    @Titulo NVARCHAR(150),
+    @Descripcion NVARCHAR(500) = NULL,
+    @PrioridadId INT,
+    @UsuarioAsignadoId INT = NULL,
+    @FechaLimite DATE
+AS
+BEGIN
+    SET NOCOUNT ON;
+    INSERT INTO Tareas (ProyectoId, Titulo, Descripcion, PrioridadId, EstadoId, UsuarioAsignadoId, FechaLimite)
+    OUTPUT INSERTED.Id
+    VALUES (@ProyectoId, @Titulo, @Descripcion, @PrioridadId, 1 /* Pendiente */, @UsuarioAsignadoId, @FechaLimite);
+END
+GO
+
+CREATE OR ALTER PROCEDURE sp_ActualizarTarea
+    @Id INT,
+    @Titulo NVARCHAR(150),
+    @Descripcion NVARCHAR(500) = NULL,
+    @PrioridadId INT,
+    @UsuarioAsignadoId INT = NULL,
+    @FechaLimite DATE
+AS
+BEGIN
+    SET NOCOUNT ON;
+    UPDATE Tareas
+    SET
+        Titulo = @Titulo,
+        Descripcion = @Descripcion,
+        PrioridadId = @PrioridadId,
+        UsuarioAsignadoId = @UsuarioAsignadoId,
+        FechaLimite = @FechaLimite
+    WHERE Id = @Id;
+END
+GO
+
+CREATE OR ALTER PROCEDURE sp_EliminarTarea
+    @Id INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    DELETE FROM Tareas WHERE Id = @Id;
+END
+GO
+
+CREATE OR ALTER PROCEDURE sp_CambiarEstadoTarea
+    @Id INT,
+    @EstadoId INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    UPDATE Tareas SET EstadoId = @EstadoId WHERE Id = @Id;
+END
+GO

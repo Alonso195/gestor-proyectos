@@ -1,6 +1,7 @@
 using Application.UseCases.Auth.Login;
 using Application.UseCases.Proyectos;
 using Application.UseCases.Resumen;
+using Application.UseCases.Tareas;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Application;
@@ -12,6 +13,7 @@ public static class DependencyInjection
         services.AddScoped<ILoginUseCase, LoginUseCase>();
 
         services.AddScoped<IProyectoUseCases, ProyectoUseCases>();
+        services.AddScoped<ITareaUseCases, TareaUseCases>();
         services.AddScoped<IResumenUseCases, ResumenUseCases>();
 
         return services;

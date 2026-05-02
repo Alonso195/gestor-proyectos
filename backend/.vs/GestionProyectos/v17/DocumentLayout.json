@@ -46,8 +46,7 @@
               "RelativeToolTip": "Src\\WebApi\\Program.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABcAAABOAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-01T15:53:37.1Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-05-01T15:53:37.1Z"
             },
             {
               "$type": "Document",
@@ -59,8 +58,7 @@
               "RelativeToolTip": "Src\\Core\\Application\\Common\\Catalogs\\EstadosCatalogo.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAqwAoAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-01T15:39:42.284Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-05-01T15:39:42.284Z"
             },
             {
               "$type": "Document",
@@ -72,8 +70,7 @@
               "RelativeToolTip": "Src\\Core\\Domain\\Interfaces\\Repositories\\IProyectoRepository.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAqwAQAAAARAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-01T15:39:06.834Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-05-01T15:39:06.834Z"
             },
             {
               "$type": "Document",
@@ -83,7 +80,7 @@
               "RelativeDocumentMoniker": "Src\\Core\\Application\\UseCases\\Proyectos\\ProyectoUseCases.cs",
               "ToolTip": "C:\\Users\\alons\\OneDrive\\Desktop\\PruebaTecnica\\backend\\Src\\Core\\Application\\UseCases\\Proyectos\\ProyectoUseCases.cs",
               "RelativeToolTip": "Src\\Core\\Application\\UseCases\\Proyectos\\ProyectoUseCases.cs",
-              "ViewState": "AgIAACwAAAAAAAAAAAAkwE0AAABoAAAAAAAAAA==",
+              "ViewState": "AgIAACwAAAAAAAAAAAAkwEoAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-05-01T15:38:30.022Z",
               "EditorCaption": ""
@@ -98,8 +95,7 @@
               "RelativeToolTip": "Src\\Infrastructure\\DataAccess\\Repositories\\ProyectoRepository.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAACAAAAAhAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-01T15:38:11.283Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-05-01T15:38:11.283Z"
             },
             {
               "$type": "Document",
@@ -111,8 +107,7 @@
               "RelativeToolTip": "Src\\WebApi\\UseCases\\Proyectos\\ProyectosController.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAABvAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-01T15:37:47.951Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-05-01T15:37:47.951Z"
             }
           ]
         }

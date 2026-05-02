@@ -12,6 +12,7 @@ public static class DependencyInjection
         services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 
         services.AddScoped<IProyectoRepository, ProyectoRepository>();
+        services.AddScoped<ITareaRepository, TareaRepository>();
         services.AddScoped<IResumenRepository, ResumenRepository>();
 
         return services;

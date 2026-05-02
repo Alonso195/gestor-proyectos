@@ -1,11 +1,58 @@
+using Domain.Entities;
+
 namespace Application.UseCases.Tareas;
 
-// TODO: Define your request/response models here.
-// Follow the pattern from Auth/Login/LoginModels.cs
+public record GetTareasPagedRequest(int ProyectoId, int Pagina, int TamanoPagina);
 
-// Examples:
-// public record GetTareasPagedRequest(int ProyectoId, int Pagina, int TamanoPagina);
-// public record TareaDto(int Id, string Titulo, ...);
-// public record CreateTareaRequest(...);
-// public record UpdateTareaRequest(...);
-// public record ChangeEstadoTareaRequest(int TareaId, int EstadoId);
+public record GetTareaByIdRequest(int Id);
+
+public record CreateTareaRequest(
+    int ProyectoId,
+    string Titulo,
+    string? Descripcion,
+    int PrioridadId,
+    int? UsuarioAsignadoId,
+    DateTime FechaLimite);
+
+public record UpdateTareaRequest(
+    int Id,
+    string Titulo,
+    string? Descripcion,
+    int PrioridadId,
+    int? UsuarioAsignadoId,
+    DateTime FechaLimite);
+
+public record DeleteTareaRequest(int Id);
+
+public record ChangeEstadoTareaRequest(int TareaId, int EstadoId);
+
+public record TareaDto(
+    int Id,
+    int ProyectoId,
+    string ProyectoNombre,
+    string Titulo,
+    string? Descripcion,
+    int PrioridadId,
+    string PrioridadNombre,
+    int EstadoId,
+    string EstadoNombre,
+    int? UsuarioAsignadoId,
+    string? UsuarioAsignadoNombre,
+    DateTime FechaLimite,
+    DateTime FechaCreacion)
+{
+    public static TareaDto FromEntity(Tarea t) => new(
+        t.Id,
+        t.ProyectoId,
+        t.ProyectoNombre,
+        t.Titulo,
+        t.Descripcion,
+        t.PrioridadId,
+        t.PrioridadNombre,
+        t.EstadoId,
+        t.EstadoNombre,
+        t.UsuarioAsignadoId,
+        t.UsuarioAsignadoNombre,
+        t.FechaLimite,
+        t.FechaCreacion);
+}
